@@ -3,19 +3,24 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+	def globalConfiguration = rootProject.extensions.getByName("ext")
+
 	compileSdkVersion 26
 	defaultConfig {
-		applicationId "de.mrcjln.shutup"
 		minSdkVersion 21
 		targetSdkVersion 26
-		versionCode 1
-		versionName "1.0"
+		applicationId globalConfiguration.getAt("androidApplicationId")
+		versionCode globalConfiguration.getAt("androidVersionCode")
+		versionName globalConfiguration.getAt("androidVersionName")
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 	buildTypes {
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+		debug {
+			applicationIdSuffix ".debug"
 		}
 	}
 }
