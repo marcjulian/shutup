@@ -21,29 +21,31 @@ class ShutUpActivity : AppCompatActivity() {
         updateWifiConnectivity()
         updateBluetoothConnectivity()
 
-        wifiConnectivity.setOnClickListener {
+        shutUpWifi.setOnCheckedChangeListener { _, _ ->
             sharedPreferencesHandler!!.revertShutUpWifi()
             updateWifiConnectivity()
         }
-        bluetoothConnectivity.setOnClickListener {
+        shutUpBluetooth.setOnCheckedChangeListener { _, _ ->
             sharedPreferencesHandler!!.revertShutUpBluetooth()
             updateBluetoothConnectivity()
         }
     }
 
     private fun updateWifiConnectivity() {
+        shutUpWifi.isChecked = sharedPreferencesHandler!!.shutUpWifi()
         if (sharedPreferencesHandler!!.shutUpWifi()) {
-            wifiConnectivity.setImageResource(R.drawable.ic_wifi_off)
+            shutUpWifiText.setText(R.string.shut_up_wifi_on_screen_lock)
         } else {
-            wifiConnectivity.setImageResource(R.drawable.ic_wifi)
+            shutUpWifiText.setText(R.string.ignore_shut_up_wifi_on_screen_lock)
         }
     }
 
     private fun updateBluetoothConnectivity() {
+        shutUpBluetooth.isChecked = sharedPreferencesHandler!!.shutUpBluetooth()
         if (sharedPreferencesHandler!!.shutUpBluetooth()) {
-            bluetoothConnectivity.setImageResource(R.drawable.ic_bluetooth_disabled)
+            shutUpBluetoothText.setText(R.string.shut_up_wifi_on_screen_lock)
         } else {
-            bluetoothConnectivity.setImageResource(R.drawable.ic_bluetooth)
+            shutUpBluetoothText.setText(R.string.ignore_shut_up_bluetooth_on_screen_lock)
         }
     }
 
