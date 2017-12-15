@@ -6,7 +6,8 @@ import timber.log.Timber
 
 class WifiConnectivity(context: Context) : Connectivity {
 
-    var wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val wifiManager: WifiManager
+            = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     override fun turnOn() {
         Timber.tag("WifiConnectivity").d("turn on")
