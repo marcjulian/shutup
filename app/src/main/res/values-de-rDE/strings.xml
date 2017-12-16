@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Shut up</string>
+
+	<string name="shut_up_wifi_on_screen_lock">Halt\'s Maul Wifi</string>
+	<string name="shut_up_bluetooth_on_screen_lock">Halt\'s Maul Bluetooth</string>
+
+	<string name="ignore_shut_up_wifi_on_screen_lock">Ignoriere Wifi</string>
+	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignoriere Bluetooth</string>
+</resources>

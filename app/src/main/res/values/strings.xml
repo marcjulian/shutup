@@ -1,6 +1,9 @@
 <resources>
 	<string name="app_name">Shut up</string>
 
-	<string name="dummy_button">Dummy Button</string>
-	<string name="dummy_content">DUMMY\nCONTENT</string>
+	<string name="shut_up_wifi_on_screen_lock">Shut up Wifi</string>
+	<string name="shut_up_bluetooth_on_screen_lock">Shut up Bluetooth</string>
+
+	<string name="ignore_shut_up_wifi_on_screen_lock">Ignore Wifi</string>
+	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignore Bluetooth</string>
 </resources>
