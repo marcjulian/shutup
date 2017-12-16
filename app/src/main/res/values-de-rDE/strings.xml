@@ -7,4 +7,7 @@
 
 	<string name="ignore_shut_up_wifi_on_screen_lock">Ignoriere Wifi</string>
 	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignoriere Bluetooth</string>
+
+	<string name="notification_shut_up_play">Halt\'s Maul</string>
+	<string name="notification_shut_up_pause">Pause</string>
 </resources>
