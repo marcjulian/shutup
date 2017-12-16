@@ -3,9 +3,10 @@ package de.squiray.shutup.presentation.ui
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import de.squiray.shutup.R
+import de.squiray.shutup.util.Consumer
+import de.squiray.shutup.util.SharedPreferencesHandler
 import kotlinx.android.synthetic.main.activity_shut_up.*
 import kotlinx.android.synthetic.main.floating_action_button.*
-import org.cryptomator.util.SharedPreferencesHandler
 
 class ShutUpActivity : AppCompatActivity() {
 
@@ -19,13 +20,14 @@ class ShutUpActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        sharedPreferencesHandler!!
+                .addShutUpConnectivityChangedListener(shutUpConsumer)
+
         updateWifiConnectivity()
         updateBluetoothConnectivity()
-        updateShutUpControl()
 
         floatingActionButton.setOnClickListener {
             sharedPreferencesHandler!!.revertShutUp()
-            updateShutUpControl()
         }
 
         shutUpWifi.setOnCheckedChangeListener { _, _ ->
@@ -35,14 +37,6 @@ class ShutUpActivity : AppCompatActivity() {
         shutUpBluetooth.setOnCheckedChangeListener { _, _ ->
             sharedPreferencesHandler!!.revertShutUpBluetooth()
             updateBluetoothConnectivity()
-        }
-    }
-
-    private fun updateShutUpControl() {
-        if (sharedPreferencesHandler!!.isShutUp()) {
-            floatingActionButton.setImageResource(R.drawable.ic_pause)
-        } else {
-            floatingActionButton.setImageResource(R.drawable.ic_play)
         }
     }
 
@@ -61,6 +55,16 @@ class ShutUpActivity : AppCompatActivity() {
             shutUpBluetoothText.setText(R.string.shut_up_bluetooth_on_screen_lock)
         } else {
             shutUpBluetoothText.setText(R.string.ignore_shut_up_bluetooth_on_screen_lock)
+        }
+    }
+
+    private val shutUpConsumer = object : Consumer<Boolean> {
+        override fun accept(enable: Boolean) {
+            if (enable) {
+                floatingActionButton.setImageResource(R.drawable.ic_pause)
+            } else {
+                floatingActionButton.setImageResource(R.drawable.ic_play)
+            }
         }
     }
 

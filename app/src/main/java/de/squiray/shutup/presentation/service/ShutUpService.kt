@@ -10,7 +10,8 @@ import de.squiray.shutup.domain.repository.ConnectivityRepositoryImpl
 import de.squiray.shutup.domain.usecase.TurnOffConnectivityUseCase
 import de.squiray.shutup.domain.usecase.TurnOnConnectivityUseCase
 import de.squiray.shutup.presentation.notification.ShutUpNotificationManager
-import org.cryptomator.util.SharedPreferencesHandler
+import de.squiray.shutup.util.Consumer
+import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
 
 
@@ -33,7 +34,21 @@ class ShutUpService : Service() {
         screenUnlockReceiver = ScreenUnlockReceiver()
         registerReceiver(screenUnlockReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
 
-        ShutUpNotificationManager(this).notifyShutUpNotification(true)
+        sharedPreferencesHandler!!.addShutUpConnectivityChangedListener(shutUpConsumer)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Timber.tag("ShutUpService").d("started")
+        if (isActionShutUpControl(intent)) {
+            Timber.tag("ShutUpService").d("Received shut up control action")
+            sharedPreferencesHandler!!.revertShutUp()
+        }
+        return START_STICKY
+    }
+
+    private fun isActionShutUpControl(intent: Intent?): Boolean {
+        return intent != null //
+                && ACTION_SHUT_UP_CONTROL == intent.action
     }
 
     override fun onDestroy() {
@@ -80,5 +95,23 @@ class ShutUpService : Service() {
     private fun stopShutUpService() {
         val shutUpService = Intent(this@ShutUpService, ShutUpService::class.java)
         stopService(shutUpService)
+    }
+
+    companion object {
+        private val ACTION_SHUT_UP_CONTROL = "actionShutUpControl"
+
+        fun shutUpControlIntent(context: Context): Intent {
+            val shutUpControlIntent = Intent(context, ShutUpService::class.java)
+            shutUpControlIntent.action = ACTION_SHUT_UP_CONTROL
+            return shutUpControlIntent
+        }
+
+    }
+
+    private val shutUpConsumer = object : Consumer<Boolean> {
+        override fun accept(isShutUp: Boolean) {
+            ShutUpNotificationManager(this@ShutUpService)
+                    .notifyShutUpNotification(true, isShutUp)
+        }
     }
 }

@@ -13,14 +13,15 @@ class ShutUpNotificationManager(context: Context) {
     private val shutUpNotification: ShutUpNotification
             = ShutUpNotification(context)
 
-    fun notifyShutUpNotification(enable: Boolean) {
+    fun notifyShutUpNotification(enable: Boolean, shutUp: Boolean) {
         if (enable) {
             notificationManager.notify(ShutUpNotification.TAG,
                     ShutUpNotification.ID,
-                    shutUpNotification.notification(CHANNEL_ID))
+                    shutUpNotification.notification(CHANNEL_ID, shutUp))
         } else {
             notificationManager.cancel(ShutUpNotification.TAG,
                     ShutUpNotification.ID)
         }
     }
+
 }

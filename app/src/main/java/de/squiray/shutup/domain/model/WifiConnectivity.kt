@@ -2,7 +2,7 @@ package de.squiray.shutup.domain.model
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import org.cryptomator.util.SharedPreferencesHandler
+import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
 
 class WifiConnectivity(context: Context) : Connectivity {
