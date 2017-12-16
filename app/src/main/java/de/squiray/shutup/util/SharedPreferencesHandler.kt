@@ -1,15 +1,30 @@
-package org.cryptomator.util
+package de.squiray.shutup.util
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import java.util.*
 
 class SharedPreferencesHandler constructor(context: Context) : SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
+    private val shutUpConnectivityChangedListeners = WeakHashMap<Consumer<Boolean>, Void>()
+
     init {
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    fun addShutUpConnectivityChangedListener(listener: Consumer<Boolean>) {
+        shutUpConnectivityChangedListeners.put(listener, null)
+        listener.accept(isShutUp())
+    }
+
+    fun isShutUp(): Boolean
+            = defaultSharedPreferences.getValue(SHUT_UP_CONNECTIVITY, true)!!
+
+    fun revertShutUp() {
+        defaultSharedPreferences.setValue(SHUT_UP_CONNECTIVITY, !isShutUp())
     }
 
     fun shutUpWifi(): Boolean
@@ -50,10 +65,16 @@ class SharedPreferencesHandler constructor(context: Context) : SharedPreferences
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        // TODO
+        if (SHUT_UP_CONNECTIVITY == key) {
+            for (listener in shutUpConnectivityChangedListeners.keys) {
+                listener.accept(isShutUp())
+            }
+        }
     }
 
     companion object {
+
+        private val SHUT_UP_CONNECTIVITY = "shutUpConnectivity"
 
         private val SHUT_UP_WIFI = "shutUpWifi"
         private val SHUT_UP_BLUETOOTH = "shutUpBluetooth"
@@ -115,4 +136,5 @@ class SharedPreferencesHandler constructor(context: Context) : SharedPreferences
             else -> throw UnsupportedOperationException("Not yet implemented")
         }
     }
+
 }

@@ -6,4 +6,7 @@
 
 	<string name="ignore_shut_up_wifi_on_screen_lock">Ignore Wifi</string>
 	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignore Bluetooth</string>
+
+	<string name="notification_shut_up_play">@string/app_name</string>
+	<string name="notification_shut_up_pause">Pause</string>
 </resources>
