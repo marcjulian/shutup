@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import de.squiray.shutup.R
 import kotlinx.android.synthetic.main.activity_shut_up.*
+import kotlinx.android.synthetic.main.floating_action_button.*
 import org.cryptomator.util.SharedPreferencesHandler
 
 class ShutUpActivity : AppCompatActivity() {
@@ -20,6 +21,12 @@ class ShutUpActivity : AppCompatActivity() {
     private fun setupView() {
         updateWifiConnectivity()
         updateBluetoothConnectivity()
+        updateShutUpControl()
+
+        floatingActionButton.setOnClickListener {
+            sharedPreferencesHandler!!.revertShutUp()
+            updateShutUpControl()
+        }
 
         shutUpWifi.setOnCheckedChangeListener { _, _ ->
             sharedPreferencesHandler!!.revertShutUpWifi()
@@ -28,6 +35,14 @@ class ShutUpActivity : AppCompatActivity() {
         shutUpBluetooth.setOnCheckedChangeListener { _, _ ->
             sharedPreferencesHandler!!.revertShutUpBluetooth()
             updateBluetoothConnectivity()
+        }
+    }
+
+    private fun updateShutUpControl() {
+        if (sharedPreferencesHandler!!.isShutUp()) {
+            floatingActionButton.setImageResource(R.drawable.ic_pause)
+        } else {
+            floatingActionButton.setImageResource(R.drawable.ic_play)
         }
     }
 

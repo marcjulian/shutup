@@ -8,10 +8,10 @@ import de.squiray.shutup.domain.model.WifiConnectivity
 class ConnectivityRepositoryImpl(context: Context) : ConnectivityRepository {
 
     private val connectivity: Array<Connectivity> =
-            // TODO add GPS
             arrayOf(
                     WifiConnectivity(context),
                     BluetoothConnectivity(context)
+                    //GpsConnectivity(context)
             )
 
     override fun turnOffConnectivity() {

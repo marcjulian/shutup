@@ -9,6 +9,8 @@ import android.os.IBinder
 import de.squiray.shutup.domain.repository.ConnectivityRepositoryImpl
 import de.squiray.shutup.domain.usecase.TurnOffConnectivityUseCase
 import de.squiray.shutup.domain.usecase.TurnOnConnectivityUseCase
+import de.squiray.shutup.presentation.notification.ShutUpNotificationManager
+import org.cryptomator.util.SharedPreferencesHandler
 import timber.log.Timber
 
 
@@ -18,14 +20,20 @@ class ShutUpService : Service() {
 
     private var screenUnlockReceiver: ScreenUnlockReceiver? = null
 
+    private var sharedPreferencesHandler: SharedPreferencesHandler? = null
+
     override fun onCreate() {
         super.onCreate()
         Timber.tag("ShutUpService").d("created")
+        sharedPreferencesHandler = SharedPreferencesHandler(this)
+
         screenLockReceiver = ScreenLockReceiver()
         registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
 
         screenUnlockReceiver = ScreenUnlockReceiver()
         registerReceiver(screenUnlockReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
+
+        ShutUpNotificationManager(this).notifyShutUpNotification(true)
     }
 
     override fun onDestroy() {
@@ -37,16 +45,17 @@ class ShutUpService : Service() {
     // TODO maybe remove when notification is enabled
     override fun onTaskRemoved(rootIntent: Intent?) {
         Timber.tag("ShutUpService").i("App killed by user")
-        stopShutUpService()
+        //stopShutUpService()
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
     internal inner class ScreenLockReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent!!.action == Intent.ACTION_SCREEN_OFF) {
+            if (intent!!.action == Intent.ACTION_SCREEN_OFF
+                    && sharedPreferencesHandler!!.isShutUp()) {
                 Timber.tag("ShutUpService").i("ScreenLock received, turn off connectivity")
 
                 TurnOffConnectivityUseCase(ConnectivityRepositoryImpl(this@ShutUpService.applicationContext))
@@ -57,7 +66,8 @@ class ShutUpService : Service() {
 
     internal inner class ScreenUnlockReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent!!.action == Intent.ACTION_SCREEN_ON) {
+            if (intent!!.action == Intent.ACTION_SCREEN_ON
+                    && sharedPreferencesHandler!!.isShutUp()) {
                 Timber.tag("ShutUpService").i("ScreenUnlock received, turn on connectivity")
 
                 TurnOnConnectivityUseCase(ConnectivityRepositoryImpl(this@ShutUpService.applicationContext))

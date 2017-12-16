@@ -12,6 +12,13 @@ class SharedPreferencesHandler constructor(context: Context) : SharedPreferences
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
+    fun isShutUp(): Boolean
+            = defaultSharedPreferences.getValue(SHUT_UP_CONNECTIVITY, true)!!
+
+    fun revertShutUp(){
+        defaultSharedPreferences.setValue(SHUT_UP_CONNECTIVITY, !isShutUp())
+    }
+
     fun shutUpWifi(): Boolean
             = defaultSharedPreferences.getValue(SHUT_UP_WIFI, true)!!
 
@@ -54,6 +61,8 @@ class SharedPreferencesHandler constructor(context: Context) : SharedPreferences
     }
 
     companion object {
+
+        private val SHUT_UP_CONNECTIVITY = "shutUpConnectivity"
 
         private val SHUT_UP_WIFI = "shutUpWifi"
         private val SHUT_UP_BLUETOOTH = "shutUpBluetooth"
@@ -115,4 +124,5 @@ class SharedPreferencesHandler constructor(context: Context) : SharedPreferences
             else -> throw UnsupportedOperationException("Not yet implemented")
         }
     }
+
 }
