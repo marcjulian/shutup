@@ -29,7 +29,7 @@ allprojects {
 	ext {
 		androidApplicationId = 'de.squiray.shutup'
 		androidVersionCode = getVersionCode()
-		androidVersionName = '0.3.0'
+		androidVersionName = '0.4.0'
 	}
 
 	repositories {
