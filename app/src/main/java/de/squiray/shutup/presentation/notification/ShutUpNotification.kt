@@ -23,15 +23,31 @@ class ShutUpNotification(val context: Context) {
 
     fun notification(channelId: String, shutUp: Boolean): Notification {
         return NotificationCompat.Builder(context, channelId)
-                .setContentText("Shutting up your phone on screen lock")
+                .setContentText(effectiveShutUpTitle(shutUp))
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(effectiveShutUpIcon(shutUp))
                 .setShowWhen(false)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentIntent(startShutUpActivity())
                 .addAction(shutUpControlAction(shutUp))
                 .build()
+    }
+
+    private fun effectiveShutUpIcon(shutUp: Boolean): Int {
+        return if (shutUp) {
+            R.drawable.ic_shut_up_notification
+        } else {
+            R.drawable.ic_not_shut_up_foreground
+        }
+    }
+
+    private fun effectiveShutUpTitle(shutUp: Boolean): String {
+        return if (shutUp) {
+            context.getString(R.string.notification_shut_up_title_play)
+        } else {
+            context.getString(R.string.notification_shut_up_title_pause)
+        }
     }
 
     private fun shutUpControlAction(shutUp: Boolean): NotificationCompat.Action {
@@ -43,9 +59,9 @@ class ShutUpNotification(val context: Context) {
 
     private fun effectiveShutUpControlText(shutUp: Boolean): String {
         return if (shutUp) {
-            context.getString(R.string.notification_shut_up_pause)
+            context.getString(R.string.notification_shut_up_action_pause)
         } else {
-            context.getString(R.string.notification_shut_up_play)
+            context.getString(R.string.notification_shut_up_action_play)
         }
     }
 

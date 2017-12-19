@@ -43,8 +43,10 @@ class ShutUpActivity : AppCompatActivity() {
     private fun updateWifiConnectivity() {
         shutUpWifi.isChecked = sharedPreferencesHandler!!.shutUpWifi()
         if (sharedPreferencesHandler!!.shutUpWifi()) {
+            wifi.setImageResource(R.drawable.ic_wifi_off)
             shutUpWifiText.setText(R.string.shut_up_wifi_on_screen_lock)
         } else {
+            wifi.setImageResource(R.drawable.ic_wifi_on)
             shutUpWifiText.setText(R.string.ignore_shut_up_wifi_on_screen_lock)
         }
     }
@@ -52,8 +54,10 @@ class ShutUpActivity : AppCompatActivity() {
     private fun updateBluetoothConnectivity() {
         shutUpBluetooth.isChecked = sharedPreferencesHandler!!.shutUpBluetooth()
         if (sharedPreferencesHandler!!.shutUpBluetooth()) {
+            bluetooth.setImageResource(R.drawable.ic_bluetooth_off)
             shutUpBluetoothText.setText(R.string.shut_up_bluetooth_on_screen_lock)
         } else {
+            bluetooth.setImageResource(R.drawable.ic_bluetooth_on)
             shutUpBluetoothText.setText(R.string.ignore_shut_up_bluetooth_on_screen_lock)
         }
     }
