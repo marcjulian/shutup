@@ -8,6 +8,8 @@
 	<string name="ignore_shut_up_wifi_on_screen_lock">Ignoriere Wifi</string>
 	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignoriere Bluetooth</string>
 
-	<string name="notification_shut_up_play">Halt\'s Maul</string>
-	<string name="notification_shut_up_pause">Pause</string>
+	<string name="notification_shut_up_action_play">Halt\'s Maul</string>
+	<string name="notification_shut_up_action_pause">Pause</string>
+	<string name="notification_shut_up_title_play">Halt\'s Maul, zum pausieren einmal tippen</string>
+	<string name="notification_shut_up_title_pause">Pause, zum Maul halten einmal tippen</string>
 </resources>
