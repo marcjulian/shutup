@@ -25,8 +25,12 @@
 			</intent-filter>
 		</activity>
 
-		<service android:name="de.squiray.shutup.presentation.service.ShutUpService"/>
 
+		<activity
+				android:name=".presentation.ui.SettingsActivity"
+				android:screenOrientation="portrait"/>
+
+		<service android:name="de.squiray.shutup.presentation.service.ShutUpService"/>
 
 	</application>
 

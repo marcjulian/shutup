@@ -1,25 +1,30 @@
 package de.squiray.shutup.presentation.ui
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import de.squiray.shutup.R
 import de.squiray.shutup.util.Consumer
 import de.squiray.shutup.util.SharedPreferencesHandler
 import kotlinx.android.synthetic.main.activity_shut_up.*
 import kotlinx.android.synthetic.main.floating_action_button.*
 
-class ShutUpActivity : AppCompatActivity() {
+@Activity(R.layout.activity_shut_up, R.menu.menu_shut_up)
+class ShutUpActivity : BaseActivity() {
 
     private var sharedPreferencesHandler: SharedPreferencesHandler? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_shut_up)
-        sharedPreferencesHandler = SharedPreferencesHandler(this)
-        setupView()
+    override fun onMenuItemSelected(itemId: Int): Boolean {
+        when (itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                return true
+            }
+        }
+        return super.onMenuItemSelected(itemId)
     }
 
-    private fun setupView() {
+    override fun setupView() {
+        sharedPreferencesHandler = SharedPreferencesHandler(this)
+
         sharedPreferencesHandler!!
                 .addShutUpConnectivityChangedListener(shutUpConsumer)
 

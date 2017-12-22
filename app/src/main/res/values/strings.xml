@@ -11,4 +11,8 @@
 	<string name="notification_shut_up_title_pause">Paused, tap to shut up</string>
 	<string name="notification_shut_up_action_play">@string/app_name</string>
 	<string name="notification_shut_up_action_pause">Pause</string>
+	<string name="screen_settings_title">Settings</string>
+	<string name="screen_settings_section_version">Version</string>
+	<string name="screen_settings_section_general">General</string>
+	<string name="screen_settings_stop_shut_up_notification">Stop Notification</string>
 </resources>
