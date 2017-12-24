@@ -15,15 +15,10 @@ import de.squiray.shutup.presentation.ui.ShutUpActivity
 
 class ShutUpNotification(val context: Context) {
 
-    companion object {
-        val TAG = "shutUpNotification"
-        val ID = 617283123
-
-    }
-
     fun notification(channelId: String, shutUp: Boolean): Notification {
         return NotificationCompat.Builder(context, channelId)
-                .setContentText(effectiveShutUpTitle(shutUp))
+                .setContentTitle(effectiveShutUpTitle(shutUp))
+                .setContentText(effectiveShutUpText(shutUp))
                 .setOngoing(true)
                 .setSmallIcon(effectiveShutUpIcon(shutUp))
                 .setShowWhen(false)
@@ -47,6 +42,14 @@ class ShutUpNotification(val context: Context) {
             context.getString(R.string.notification_shut_up_title_play)
         } else {
             context.getString(R.string.notification_shut_up_title_pause)
+        }
+    }
+
+    private fun effectiveShutUpText(shutUp: Boolean): String {
+        return if (shutUp) {
+            context.getString(R.string.notification_shut_up_text_play)
+        } else {
+            context.getString(R.string.notification_shut_up_text_pause)
         }
     }
 
@@ -80,4 +83,8 @@ class ShutUpNotification(val context: Context) {
         return PendingIntent.getActivity(context, 0, startTheActivity, 0)
     }
 
+    companion object {
+        val TAG = "shutUpNotification"
+        val ID = 617283123
+    }
 }
