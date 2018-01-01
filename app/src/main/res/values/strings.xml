@@ -19,7 +19,6 @@
 	<string name="screen_settings_title">Settings</string>
 	<string name="screen_settings_section_version">Version</string>
 	<string name="screen_settings_section_general">General</string>
-	<string name="screen_settings_stop_shut_up_notification">Stop Notification</string>
 	<string name="screen_settings_shut_up_notification_title">Shut Up Notification</string>
 	<string name="screen_settings_shut_up_notification_summary">Shut up control in your notification bar</string>
 </resources>
