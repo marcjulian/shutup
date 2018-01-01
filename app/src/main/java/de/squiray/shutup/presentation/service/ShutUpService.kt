@@ -43,33 +43,31 @@ class ShutUpService : DaggerService() {
         screenUnlockReceiver = ScreenUnlockReceiver()
         registerReceiver(screenUnlockReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
 
-        sharedPreferencesHandler.addShutUpConnectivityChangedListener(shutUpConsumer)
+        sharedPreferencesHandler.addShutUpNotificationChangedListener(shutUpNotificationConsumer)
+        sharedPreferencesHandler.addShutUpConnectivityChangedListener(shutUpConnectivityConsumer)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.tag("ShutUpService").d("started")
-        if (isActionShutUpControl(intent)) {
-            Timber.tag("ShutUpService").d("Received shut up control action")
-            sharedPreferencesHandler.revertShutUp()
+        when {
+            isShowNotificationIntent(intent) -> {
+                shutUpNotificationManager.notifyShutUpNotification(sharedPreferencesHandler.isShutUp())
+            }
+            isActionShutUpControl(intent) -> {
+                Timber.tag("ShutUpService").d("Received shut up control action")
+                sharedPreferencesHandler.revertShutUp()
+            }
+            isStopNotificationIntent(intent) -> {
+                shutUpNotificationManager.cancelShutUpNotification()
+            }
         }
         return START_STICKY
-    }
-
-    private fun isActionShutUpControl(intent: Intent?): Boolean {
-        return intent != null //
-                && ACTION_SHUT_UP_CONTROL == intent.action
     }
 
     override fun onDestroy() {
         Timber.tag("ShutUpService").i("destroyed")
         unregisterReceiver(screenLockReceiver)
         unregisterReceiver(screenUnlockReceiver)
-    }
-
-    // TODO maybe remove when notification is enabled
-    override fun onTaskRemoved(rootIntent: Intent?) {
-        Timber.tag("ShutUpService").i("App killed by user")
-        //stopShutUpService()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -99,26 +97,56 @@ class ShutUpService : DaggerService() {
 
     }
 
-    private fun stopShutUpService() {
-        val shutUpService = Intent(this@ShutUpService, ShutUpService::class.java)
-        stopService(shutUpService)
+    private val shutUpNotificationConsumer = object : Consumer<Boolean> {
+        override fun accept(isEnabled: Boolean) {
+            if (isEnabled) {
+                startService(showShutUpNotificationIntent(this@ShutUpService))
+            } else {
+                startService(stopShutUpNotificationIntent(this@ShutUpService))
+            }
+        }
     }
 
+    private val shutUpConnectivityConsumer = object : Consumer<Boolean> {
+        override fun accept(value: Boolean) {
+            if (sharedPreferencesHandler.isShutUpNotificationEnabled()) {
+                startService(showShutUpNotificationIntent(this@ShutUpService))
+            }
+        }
+    }
+
+    private fun isActionShutUpControl(intent: Intent?): Boolean {
+        return intent != null //
+                && ACTION_SHUT_UP_CONTROL == intent.action
+    }
+
+    private fun isShowNotificationIntent(intent: Intent?): Boolean =
+            intent != null && intent.action == ACTION_SHOW_SHUT_UP_NOTIFICATION
+
+    private fun isStopNotificationIntent(intent: Intent?): Boolean =
+            intent != null && intent.action == ACTION_STOP_SHUT_UP_NOTIFICATION
+
     companion object {
+        private val ACTION_SHOW_SHUT_UP_NOTIFICATION = "actionShowShutUpNotification"
+        private val ACTION_STOP_SHUT_UP_NOTIFICATION = "actionStopShutUpNotification"
         private val ACTION_SHUT_UP_CONTROL = "actionShutUpControl"
+
+        fun showShutUpNotificationIntent(context: Context): Intent {
+            val showNotificationIntent = Intent(context, ShutUpService::class.java)
+            showNotificationIntent.action = ACTION_SHOW_SHUT_UP_NOTIFICATION
+            return showNotificationIntent
+        }
+
+        fun stopShutUpNotificationIntent(context: Context): Intent {
+            val stopNotificationIntent = Intent(context, ShutUpService::class.java)
+            stopNotificationIntent.action = ACTION_STOP_SHUT_UP_NOTIFICATION
+            return stopNotificationIntent
+        }
 
         fun shutUpControlIntent(context: Context): Intent {
             val shutUpControlIntent = Intent(context, ShutUpService::class.java)
             shutUpControlIntent.action = ACTION_SHUT_UP_CONTROL
             return shutUpControlIntent
-        }
-
-    }
-
-    private val shutUpConsumer = object : Consumer<Boolean> {
-        override fun accept(isShutUp: Boolean) {
-            shutUpNotificationManager
-                    .notifyShutUpNotification(true, isShutUp)
         }
     }
 }

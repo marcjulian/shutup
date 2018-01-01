@@ -13,6 +13,7 @@ class SharedPreferencesHandler @Inject constructor(
     private val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     private val shutUpConnectivityChangedListeners = WeakHashMap<Consumer<Boolean>, Void>()
+    private val shutUpNotificationChangedListeners = WeakHashMap<Consumer<Boolean>, Void>()
 
     init {
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -23,12 +24,20 @@ class SharedPreferencesHandler @Inject constructor(
         listener.accept(isShutUp())
     }
 
+    fun addShutUpNotificationChangedListener(listener: Consumer<Boolean>) {
+        shutUpNotificationChangedListeners.put(listener, null)
+        listener.accept(isShutUpNotificationEnabled())
+    }
+
     fun isShutUp(): Boolean
             = defaultSharedPreferences.getValue(SHUT_UP_CONNECTIVITY, true)!!
 
     fun revertShutUp() {
         defaultSharedPreferences.setValue(SHUT_UP_CONNECTIVITY, !isShutUp())
     }
+
+    fun isShutUpNotificationEnabled(): Boolean
+            = defaultSharedPreferences.getValue(SHUT_UP_NOTIFICATION, false)!!
 
     fun shutUpWifi(): Boolean
             = defaultSharedPreferences.getValue(SHUT_UP_WIFI, true)!!
@@ -72,11 +81,16 @@ class SharedPreferencesHandler @Inject constructor(
             for (listener in shutUpConnectivityChangedListeners.keys) {
                 listener.accept(isShutUp())
             }
+        } else if (SHUT_UP_NOTIFICATION == key) {
+            for (listener in shutUpNotificationChangedListeners.keys) {
+                listener.accept(isShutUpNotificationEnabled())
+            }
         }
     }
 
     companion object {
 
+        private val SHUT_UP_NOTIFICATION = "shutUpNotification"
         private val SHUT_UP_CONNECTIVITY = "shutUpConnectivity"
 
         private val SHUT_UP_WIFI = "shutUpWifi"

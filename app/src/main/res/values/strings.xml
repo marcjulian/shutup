@@ -7,14 +7,19 @@
 	<string name="ignore_shut_up_wifi_on_screen_lock">Ignore Wifi</string>
 	<string name="ignore_shut_up_bluetooth_on_screen_lock">Ignore Bluetooth</string>
 
+	<!-- Notifications -->
 	<string name="notification_shut_up_title_play">Shut up</string>
 	<string name="notification_shut_up_text_play">Tap to pause</string>
 	<string name="notification_shut_up_title_pause">Paused</string>
 	<string name="notification_shut_up_text_pause">Tap to shut up</string>
 	<string name="notification_shut_up_action_play">@string/app_name</string>
 	<string name="notification_shut_up_action_pause">Pause</string>
+
+	<!-- Settings -->
 	<string name="screen_settings_title">Settings</string>
 	<string name="screen_settings_section_version">Version</string>
 	<string name="screen_settings_section_general">General</string>
 	<string name="screen_settings_stop_shut_up_notification">Stop Notification</string>
+	<string name="screen_settings_shut_up_notification_title">Shut Up Notification</string>
+	<string name="screen_settings_shut_up_notification_summary">Shut up control in your notification bar</string>
 </resources>
