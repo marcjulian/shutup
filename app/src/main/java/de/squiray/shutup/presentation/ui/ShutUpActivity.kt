@@ -6,6 +6,7 @@ import de.squiray.shutup.util.Consumer
 import de.squiray.shutup.util.SharedPreferencesHandler
 import kotlinx.android.synthetic.main.activity_shut_up.*
 import kotlinx.android.synthetic.main.floating_action_button.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
 
 @Activity(R.layout.activity_shut_up, R.menu.menu_shut_up)
 class ShutUpActivity : BaseActivity() {
@@ -23,6 +24,7 @@ class ShutUpActivity : BaseActivity() {
     }
 
     override fun setupView() {
+        setupToolbar()
         sharedPreferencesHandler = SharedPreferencesHandler(this)
 
         sharedPreferencesHandler!!
@@ -43,6 +45,10 @@ class ShutUpActivity : BaseActivity() {
             sharedPreferencesHandler!!.revertShutUpBluetooth()
             updateBluetoothConnectivity()
         }
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
     }
 
     private fun updateWifiConnectivity() {

@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import de.squiray.shutup.R
 
-abstract class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     private val NO_MENU = -1
 
@@ -31,6 +31,10 @@ abstract class BaseActivity: AppCompatActivity() {
     }
 
     open fun onMenuItemSelected(itemId: Int): Boolean {
+        if (itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
         return false
     }
 

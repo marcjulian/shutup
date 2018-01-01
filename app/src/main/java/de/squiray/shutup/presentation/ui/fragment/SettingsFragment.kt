@@ -46,7 +46,7 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun onStopAppNotificationClicked() {
-        activity.startService(ShutUpService.stopShutUpService(activity))
+        //activity.startService(ShutUpService.stopShutUpService(activity))
         // TODO pause shut up
     }
 }
