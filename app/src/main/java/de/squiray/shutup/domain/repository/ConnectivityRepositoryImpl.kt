@@ -1,17 +1,19 @@
 package de.squiray.shutup.domain.repository
 
-import android.content.Context
 import de.squiray.shutup.domain.model.BluetoothConnectivity
 import de.squiray.shutup.domain.model.Connectivity
 import de.squiray.shutup.domain.model.WifiConnectivity
+import javax.inject.Inject
 
-class ConnectivityRepositoryImpl(context: Context) : ConnectivityRepository {
+class ConnectivityRepositoryImpl @Inject constructor(
+        wifiConnectivity: WifiConnectivity,
+        bluetoothConnectivity: BluetoothConnectivity
+) : ConnectivityRepository {
 
     private val connectivity: Array<Connectivity> =
             arrayOf(
-                    WifiConnectivity(context),
-                    BluetoothConnectivity(context)
-                    //GpsConnectivity(context)
+                    wifiConnectivity,
+                    bluetoothConnectivity
             )
 
     override fun turnOffConnectivity() {

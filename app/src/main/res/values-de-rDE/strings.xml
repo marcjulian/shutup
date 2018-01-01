@@ -10,6 +10,13 @@
 
 	<string name="notification_shut_up_action_play">Halt\'s Maul</string>
 	<string name="notification_shut_up_action_pause">Pause</string>
-	<string name="notification_shut_up_title_play">Halt\'s Maul, zum pausieren einmal tippen</string>
-	<string name="notification_shut_up_title_pause">Pause, zum Maul halten einmal tippen</string>
+	<string name="notification_shut_up_text_play">Halt\'s Maul, zum pausieren einmal tippen</string>
+	<string name="notification_shut_up_text_pause">Pause, zum Maul halten einmal tippen</string>
+	<string name="notification_shut_up_title_play">Halt\'s Maul</string>
+	<string name="notification_shut_up_title_pause">Pausiert</string>
+	<string name="screen_settings_title">Einstellugnen</string>
+	<string name="screen_settings_section_version">Version</string>
+	<string name="screen_settings_section_general">Allgemein</string>
+	<string name="screen_settings_shut_up_notification_title">Shut Up Notifikation</string>
+	<string name="screen_settings_shut_up_notification_summary">Halt\'s Maul Kontrolle in deiner Notifikationsleiste</string>
 </resources>

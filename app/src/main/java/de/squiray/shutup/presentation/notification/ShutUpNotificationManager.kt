@@ -1,27 +1,23 @@
 package de.squiray.shutup.presentation.notification
 
-import android.content.Context
 import android.support.v4.app.NotificationManagerCompat
+import javax.inject.Inject
 
-class ShutUpNotificationManager(context: Context) {
-
+class ShutUpNotificationManager @Inject constructor(
+        private val notificationManager: NotificationManagerCompat,
+        private val shutUpNotification: ShutUpNotification
+) {
     private val CHANNEL_ID = "shutUpChannelId427"
 
-    private val notificationManager: NotificationManagerCompat
-            = NotificationManagerCompat.from(context)
+    fun notifyShutUpNotification(shutUp: Boolean) {
+        notificationManager.notify(ShutUpNotification.TAG,
+                ShutUpNotification.ID,
+                shutUpNotification.notification(CHANNEL_ID, shutUp))
+    }
 
-    private val shutUpNotification: ShutUpNotification
-            = ShutUpNotification(context)
-
-    fun notifyShutUpNotification(enable: Boolean, shutUp: Boolean) {
-        if (enable) {
-            notificationManager.notify(ShutUpNotification.TAG,
-                    ShutUpNotification.ID,
-                    shutUpNotification.notification(CHANNEL_ID, shutUp))
-        } else {
-            notificationManager.cancel(ShutUpNotification.TAG,
-                    ShutUpNotification.ID)
-        }
+    fun cancelShutUpNotification() {
+        notificationManager.cancel(ShutUpNotification.TAG,
+                ShutUpNotification.ID)
     }
 
 }

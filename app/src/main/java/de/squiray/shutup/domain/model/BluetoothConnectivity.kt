@@ -1,18 +1,14 @@
 package de.squiray.shutup.domain.model
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Context
 import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
+import javax.inject.Inject
 
-class BluetoothConnectivity(context: Context) : Connectivity {
-
-    private val bluetoothAdapter: BluetoothAdapter
-            = (context.applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-
-    private val sharedPreferencesHandler: SharedPreferencesHandler
-            = SharedPreferencesHandler(context)
+class BluetoothConnectivity @Inject constructor(
+        private val bluetoothAdapter: BluetoothAdapter,
+        private val sharedPreferencesHandler: SharedPreferencesHandler
+) : Connectivity {
 
     override fun turnOn() {
         if (sharedPreferencesHandler.shutUpBluetooth() && sharedPreferencesHandler.wasBluetoothOn()) {

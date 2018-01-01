@@ -1,48 +1,60 @@
-package de.squiray.shutup.presentation.ui
+package de.squiray.shutup.presentation.ui.activity
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import de.squiray.shutup.R
 import de.squiray.shutup.util.Consumer
 import de.squiray.shutup.util.SharedPreferencesHandler
 import kotlinx.android.synthetic.main.activity_shut_up.*
 import kotlinx.android.synthetic.main.floating_action_button.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
+import javax.inject.Inject
 
-class ShutUpActivity : AppCompatActivity() {
+@Activity(R.layout.activity_shut_up, R.menu.menu_shut_up)
+class ShutUpActivity : BaseActivity() {
 
-    private var sharedPreferencesHandler: SharedPreferencesHandler? = null
+    @Inject
+    lateinit var sharedPreferencesHandler: SharedPreferencesHandler
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_shut_up)
-        sharedPreferencesHandler = SharedPreferencesHandler(this)
-        setupView()
+    override fun onMenuItemSelected(itemId: Int): Boolean {
+        when (itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                return true
+            }
+        }
+        return super.onMenuItemSelected(itemId)
     }
 
-    private fun setupView() {
-        sharedPreferencesHandler!!
+    override fun setupView() {
+        setupToolbar()
+
+        sharedPreferencesHandler
                 .addShutUpConnectivityChangedListener(shutUpConsumer)
 
         updateWifiConnectivity()
         updateBluetoothConnectivity()
 
         floatingActionButton.setOnClickListener {
-            sharedPreferencesHandler!!.revertShutUp()
+            sharedPreferencesHandler.revertShutUp()
         }
 
         shutUpWifi.setOnCheckedChangeListener { _, _ ->
-            sharedPreferencesHandler!!.revertShutUpWifi()
+            sharedPreferencesHandler.revertShutUpWifi()
             updateWifiConnectivity()
         }
         shutUpBluetooth.setOnCheckedChangeListener { _, _ ->
-            sharedPreferencesHandler!!.revertShutUpBluetooth()
+            sharedPreferencesHandler.revertShutUpBluetooth()
             updateBluetoothConnectivity()
         }
     }
 
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
+    }
+
     private fun updateWifiConnectivity() {
-        shutUpWifi.isChecked = sharedPreferencesHandler!!.shutUpWifi()
-        if (sharedPreferencesHandler!!.shutUpWifi()) {
+        shutUpWifi.isChecked = sharedPreferencesHandler.shutUpWifi()
+        if (sharedPreferencesHandler.shutUpWifi()) {
             wifi.setImageResource(R.drawable.ic_wifi_off)
             shutUpWifiText.setText(R.string.shut_up_wifi_on_screen_lock)
         } else {
@@ -52,8 +64,8 @@ class ShutUpActivity : AppCompatActivity() {
     }
 
     private fun updateBluetoothConnectivity() {
-        shutUpBluetooth.isChecked = sharedPreferencesHandler!!.shutUpBluetooth()
-        if (sharedPreferencesHandler!!.shutUpBluetooth()) {
+        shutUpBluetooth.isChecked = sharedPreferencesHandler.shutUpBluetooth()
+        if (sharedPreferencesHandler.shutUpBluetooth()) {
             bluetooth.setImageResource(R.drawable.ic_bluetooth_off)
             shutUpBluetoothText.setText(R.string.shut_up_bluetooth_on_screen_lock)
         } else {

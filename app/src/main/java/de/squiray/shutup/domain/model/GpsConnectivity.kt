@@ -3,11 +3,12 @@ package de.squiray.shutup.domain.model
 import android.content.Context
 import android.location.LocationManager
 import timber.log.Timber
-import android.content.Intent
+import javax.inject.Inject
 
-
-
-class GpsConnectivity(val context: Context) : Connectivity {
+// TODO not working yet
+class GpsConnectivity @Inject constructor(
+        val context: Context
+) : Connectivity {
 
     private val locationManager: LocationManager
             = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager

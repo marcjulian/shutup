@@ -1,6 +1,6 @@
 package de.squiray.shutup.util
 
-interface Consumer<T> {
+interface Consumer<in T> {
 
     fun accept(value: T)
 

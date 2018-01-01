@@ -1,17 +1,14 @@
 package de.squiray.shutup.domain.model
 
-import android.content.Context
 import android.net.wifi.WifiManager
 import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
+import javax.inject.Inject
 
-class WifiConnectivity(context: Context) : Connectivity {
-
-    private val wifiManager: WifiManager
-            = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-    private val sharedPreferenceHandler: SharedPreferencesHandler
-            = SharedPreferencesHandler(context)
+class WifiConnectivity @Inject constructor(
+        private val wifiManager: WifiManager,
+        private val sharedPreferenceHandler: SharedPreferencesHandler
+) : Connectivity {
 
     override fun turnOn() {
         if (sharedPreferenceHandler.shutUpWifi() && sharedPreferenceHandler.wasWifiOn()) {
