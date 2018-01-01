@@ -7,16 +7,15 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
 import de.squiray.shutup.domain.repository.RepositoryModule
-import de.squiray.shutup.presentation.di.module.ActivityModule
-import de.squiray.shutup.presentation.di.module.AppModule
-import de.squiray.shutup.presentation.di.module.FragmentModule
-import de.squiray.shutup.presentation.di.module.ThreadModule
+import de.squiray.shutup.presentation.di.module.*
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
     (AndroidSupportInjectionModule::class),
     (AppModule::class),
+    (ProviderModule::class),
+    (ConnectivityModule::class),
     (ThreadModule::class),
     (RepositoryModule::class),
     (ActivityModule::class),

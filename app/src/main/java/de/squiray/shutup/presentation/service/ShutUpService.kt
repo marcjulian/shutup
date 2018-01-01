@@ -6,27 +6,36 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import dagger.android.DaggerService
-import de.squiray.shutup.domain.repository.ConnectivityRepositoryImpl
 import de.squiray.shutup.domain.usecase.TurnOffConnectivityUseCase
 import de.squiray.shutup.domain.usecase.TurnOnConnectivityUseCase
 import de.squiray.shutup.presentation.notification.ShutUpNotificationManager
 import de.squiray.shutup.util.Consumer
 import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
+import javax.inject.Inject
 
 
 class ShutUpService : DaggerService() {
+
+    @Inject
+    lateinit var turnOnConnectivityUseCase: TurnOnConnectivityUseCase
+
+    @Inject
+    lateinit var turnOffConnectivityUseCase: TurnOffConnectivityUseCase
+
+    @Inject
+    lateinit var sharedPreferencesHandler: SharedPreferencesHandler
+
+    @Inject
+    lateinit var shutUpNotificationManager: ShutUpNotificationManager
 
     private var screenLockReceiver: BroadcastReceiver? = null
 
     private var screenUnlockReceiver: ScreenUnlockReceiver? = null
 
-    private var sharedPreferencesHandler: SharedPreferencesHandler? = null
-
     override fun onCreate() {
         super.onCreate()
         Timber.tag("ShutUpService").d("created")
-        sharedPreferencesHandler = SharedPreferencesHandler(this)
 
         screenLockReceiver = ScreenLockReceiver()
         registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
@@ -34,14 +43,14 @@ class ShutUpService : DaggerService() {
         screenUnlockReceiver = ScreenUnlockReceiver()
         registerReceiver(screenUnlockReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
 
-        sharedPreferencesHandler!!.addShutUpConnectivityChangedListener(shutUpConsumer)
+        sharedPreferencesHandler.addShutUpConnectivityChangedListener(shutUpConsumer)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.tag("ShutUpService").d("started")
         if (isActionShutUpControl(intent)) {
             Timber.tag("ShutUpService").d("Received shut up control action")
-            sharedPreferencesHandler!!.revertShutUp()
+            sharedPreferencesHandler.revertShutUp()
         }
         return START_STICKY
     }
@@ -70,11 +79,10 @@ class ShutUpService : DaggerService() {
     internal inner class ScreenLockReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent!!.action == Intent.ACTION_SCREEN_OFF
-                    && sharedPreferencesHandler!!.isShutUp()) {
+                    && sharedPreferencesHandler.isShutUp()) {
                 Timber.tag("ShutUpService").i("ScreenLock received, turn off connectivity")
 
-                TurnOffConnectivityUseCase(ConnectivityRepositoryImpl(this@ShutUpService.applicationContext))
-                        .execute()
+                turnOffConnectivityUseCase.execute()
             }
         }
     }
@@ -82,11 +90,10 @@ class ShutUpService : DaggerService() {
     internal inner class ScreenUnlockReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent!!.action == Intent.ACTION_SCREEN_ON
-                    && sharedPreferencesHandler!!.isShutUp()) {
+                    && sharedPreferencesHandler.isShutUp()) {
                 Timber.tag("ShutUpService").i("ScreenUnlock received, turn on connectivity")
 
-                TurnOnConnectivityUseCase(ConnectivityRepositoryImpl(this@ShutUpService.applicationContext))
-                        .execute()
+                turnOnConnectivityUseCase.execute()
             }
         }
 
@@ -110,7 +117,7 @@ class ShutUpService : DaggerService() {
 
     private val shutUpConsumer = object : Consumer<Boolean> {
         override fun accept(isShutUp: Boolean) {
-            ShutUpNotificationManager(this@ShutUpService)
+            shutUpNotificationManager
                     .notifyShutUpNotification(true, isShutUp)
         }
     }

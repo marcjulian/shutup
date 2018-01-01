@@ -1,10 +1,12 @@
 package de.squiray.shutup.domain.usecase
 
-import de.squiray.shutup.domain.repository.ConnectivityRepositoryImpl
+import de.squiray.shutup.domain.repository.ConnectivityRepository
+import javax.inject.Inject
 
-class TurnOnConnectivityUseCase(val connectivityRepositoryImpl: ConnectivityRepositoryImpl)
-    : UseCase() {
+class TurnOnConnectivityUseCase @Inject constructor(
+        private val connectivityRepository: ConnectivityRepository
+) : UseCase() {
     override fun execute() {
-        connectivityRepositoryImpl.turnOnConnectivity()
+        connectivityRepository.turnOnConnectivity()
     }
 }

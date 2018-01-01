@@ -11,9 +11,12 @@ import android.support.v4.content.ContextCompat
 import de.squiray.shutup.R
 import de.squiray.shutup.presentation.service.ShutUpService
 import de.squiray.shutup.presentation.ui.activity.ShutUpActivity
+import javax.inject.Inject
 
 
-class ShutUpNotification(val context: Context) {
+class ShutUpNotification @Inject constructor(
+        private val context: Context
+) {
 
     fun notification(channelId: String, shutUp: Boolean): Notification {
         return NotificationCompat.Builder(context, channelId)

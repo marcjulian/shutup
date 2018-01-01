@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import java.util.*
+import javax.inject.Inject
 
-class SharedPreferencesHandler constructor(context: Context) : SharedPreferences.OnSharedPreferenceChangeListener {
+class SharedPreferencesHandler @Inject constructor(
+        context: Context
+) : SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val defaultSharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
