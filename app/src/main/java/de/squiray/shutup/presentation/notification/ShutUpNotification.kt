@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import de.squiray.shutup.R
 import de.squiray.shutup.presentation.service.ShutUpService
-import de.squiray.shutup.presentation.ui.ShutUpActivity
+import de.squiray.shutup.presentation.ui.activity.ShutUpActivity
 
 
 class ShutUpNotification(val context: Context) {

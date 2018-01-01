@@ -1,8 +1,10 @@
 package de.squiray.shutup
 
-import android.app.Application
 import android.content.Intent
 import android.os.Build
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
+import de.squiray.shutup.presentation.di.component.DaggerAppComponent
 import de.squiray.shutup.presentation.service.ShutUpService
 import de.squiray.shutup.util.logging.CrashLogging
 import de.squiray.shutup.util.logging.DebugLogger
@@ -10,7 +12,7 @@ import de.squiray.shutup.util.logging.ReleaseLogger
 import timber.log.Timber
 
 
-class ShutUpApp : Application() {
+class ShutUpApp : DaggerApplication() {
 
     private var shutUpService: Intent? = null
 
@@ -22,6 +24,13 @@ class ShutUpApp : Application() {
                 Build.VERSION.RELEASE, Build.VERSION.SDK_INT, //
                 Build.MODEL)
         startShutUpService()
+    }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent
+                .builder()
+                .application(this)
+                .build()
     }
 
     private fun startShutUpService() {

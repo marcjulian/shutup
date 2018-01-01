@@ -16,7 +16,7 @@
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme">
 		<activity
-				android:name="de.squiray.shutup.presentation.ui.ShutUpActivity"
+				android:name="de.squiray.shutup.presentation.ui.activity.ShutUpActivity"
 				android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -27,7 +27,7 @@
 
 
 		<activity
-				android:name=".presentation.ui.SettingsActivity"
+				android:name=".presentation.ui.activity.SettingsActivity"
 				android:screenOrientation="portrait"/>
 
 		<service android:name="de.squiray.shutup.presentation.service.ShutUpService"/>

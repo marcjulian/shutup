@@ -1,4 +1,4 @@
-package de.squiray.shutup.presentation.ui
+package de.squiray.shutup.presentation.ui.activity
 
 import android.content.Intent
 import de.squiray.shutup.R

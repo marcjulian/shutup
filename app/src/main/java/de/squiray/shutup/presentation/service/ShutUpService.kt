@@ -1,11 +1,11 @@
 package de.squiray.shutup.presentation.service
 
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import dagger.android.DaggerService
 import de.squiray.shutup.domain.repository.ConnectivityRepositoryImpl
 import de.squiray.shutup.domain.usecase.TurnOffConnectivityUseCase
 import de.squiray.shutup.domain.usecase.TurnOnConnectivityUseCase
@@ -15,7 +15,7 @@ import de.squiray.shutup.util.SharedPreferencesHandler
 import timber.log.Timber
 
 
-class ShutUpService : Service() {
+class ShutUpService : DaggerService() {
 
     private var screenLockReceiver: BroadcastReceiver? = null
 

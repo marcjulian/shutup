@@ -1,4 +1,4 @@
-package de.squiray.shutup.presentation.ui
+package de.squiray.shutup.presentation.ui.activity
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)

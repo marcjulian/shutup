@@ -1,4 +1,4 @@
-package de.squiray.shutup.presentation.ui
+package de.squiray.shutup.presentation.ui.activity
 
 import de.squiray.shutup.R
 import kotlinx.android.synthetic.main.layout_toolbar.*
